@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <h1>NEW PAGE</h1>
+	<button onclick="closeNew()">Press to Close this Page</button>
+	
+	<script>
+	const {remote, ipcRenderer} = require('electron')
+	
+	//receives messages from the test.html page
+	ipcRenderer.on('sendToNew', (event) => {
+		document.write("<p>Hello world again</p>")
+	})
+	
+	//sends messages from this html page to test.html
+	let test_win = remote.getGlobal('test_win');
+	function closeNew() {
+		if (test_win) test_win.webContents.send('closeNew')
+	}
+	</script>
+  </body>
+</html>

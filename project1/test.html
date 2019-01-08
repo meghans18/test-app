@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+  </head>
+  <body>
+    <h1>TEST PAGE</h1>
+    this is a test page
+	<button onclick="openNew()">Open New Page</button>
+	<button onclick="helloMain()">Close this page</button>
+	<button onclick="sendToNew()">Send something to new html page</button>
+	
+	<script>
+	const {remote} = require('electron')
+	const {BrowserWindow} = remote
+	const {ipcRenderer} = require('electron')
+	const win = new BrowserWindow({show: false})
+	
+	//opens a new html page
+	function openNew() {
+		win.loadFile('project1/subpages/new.html')
+		win.show()
+	}
+	
+	//closes this html page
+	function helloMain() {
+		ipcRenderer.send('helloMain')
+	}
+	
+	//sends messages between from this html page to the new html page
+	function sendToNew() {
+		win.webContents.send('sendToNew')
+	}
+	
+	//receives messages from the new html page
+	ipcRenderer.on('closeNew', (event) => {
+		win.hide()
+	})
+	</script>
+  </body>
+</html>
